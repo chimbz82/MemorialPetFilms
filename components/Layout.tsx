@@ -10,56 +10,67 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFooter }) => {
+  const handleNavClick = (e: React.MouseEvent, step: AppStep, section?: string) => {
+    // If it's a link to a section on the same page, we handle it via state/scroll
+    e.preventDefault();
+    onNavigate(step, section);
+  };
+
   return (
     <div className="min-h-screen flex flex-col font-sans">
       {!hideNav && (
-        <nav className="bg-white/80 backdrop-blur-md border-b border-stone-200 sticky top-0 z-50">
+        <nav className="bg-white/80 backdrop-blur-md border-b border-stone-200 sticky top-0 z-[60] pointer-events-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
-              <button 
-                className="flex items-center cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 rounded-lg px-2 py-1"
-                onClick={() => onNavigate(AppStep.LANDING)}
+              <a 
+                href="/"
+                className="flex items-center cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 rounded-lg px-2 py-1 z-[70] pointer-events-auto"
+                onClick={(e) => handleNavClick(e, AppStep.LANDING)}
               >
                 <span className="text-xl mr-2 grayscale group-hover:grayscale-0 transition-all duration-300">🐾</span>
                 <span className="text-lg font-serif font-bold text-stone-800 tracking-tight">Eternal Paws</span>
-              </button>
-              <div className="hidden md:flex space-x-8 text-sm font-medium">
-                <button 
-                  onClick={() => onNavigate(AppStep.LANDING, 'how-it-works')} 
-                  className="text-stone-500 hover:text-stone-900 relative py-1 transition-colors"
+              </a>
+              <div className="hidden md:flex space-x-8 text-sm font-medium items-center z-[70] pointer-events-auto">
+                <a 
+                  href="#how-it-works"
+                  onClick={(e) => handleNavClick(e, AppStep.LANDING, 'how-it-works')} 
+                  className="text-stone-500 hover:text-stone-900 relative py-1 transition-colors cursor-pointer"
                 >
                   How it works
-                </button>
-                <button 
-                  onClick={() => onNavigate(AppStep.LANDING, 'templates')} 
-                  className="text-stone-500 hover:text-stone-900 relative py-1 transition-colors"
+                </a>
+                <a 
+                  href="#templates"
+                  onClick={(e) => handleNavClick(e, AppStep.LANDING, 'templates')} 
+                  className="text-stone-500 hover:text-stone-900 relative py-1 transition-colors cursor-pointer"
                 >
                   Templates
-                </button>
-                <button 
-                  onClick={() => onNavigate(AppStep.LANDING, 'pricing')} 
-                  className="text-stone-500 hover:text-stone-900 relative py-1 transition-colors"
+                </a>
+                <a 
+                  href="#pricing"
+                  onClick={(e) => handleNavClick(e, AppStep.LANDING, 'pricing')} 
+                  className="text-stone-500 hover:text-stone-900 relative py-1 transition-colors cursor-pointer"
                 >
                   Pricing
-                </button>
-                <button 
-                  onClick={() => onNavigate(AppStep.UPLOAD)}
-                  className="bg-stone-900 text-white px-5 py-2 rounded-full hover:bg-stone-800 transition-all shadow-sm active:scale-95"
+                </a>
+                <a 
+                  href="/create"
+                  onClick={(e) => handleNavClick(e, AppStep.UPLOAD)}
+                  className="bg-stone-900 text-white px-5 py-2 rounded-full hover:bg-stone-800 transition-all shadow-sm active:scale-95 cursor-pointer ml-4"
                 >
                   Create Tribute
-                </button>
+                </a>
               </div>
             </div>
           </div>
         </nav>
       )}
 
-      <main className="flex-grow">
+      <main className="flex-grow relative z-10">
         {children}
       </main>
 
       {!hideFooter && (
-        <footer className="bg-stone-50 border-t border-stone-200 py-16">
+        <footer className="bg-stone-50 border-t border-stone-200 py-16 relative z-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
               <div className="col-span-1 md:col-span-2">
