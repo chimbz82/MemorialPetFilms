@@ -1,0 +1,7 @@
+{
+  "name": "Eternal Paws - Pet Memorial Video Creator",
+  "description": "A respectful and beautiful tool to create lasting video tributes for beloved pets, featuring AI-assisted message writing and high-quality templates.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
