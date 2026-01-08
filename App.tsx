@@ -43,10 +43,14 @@ const App: React.FC = () => {
     }
   };
 
+  const isLanding = currentStep === AppStep.LANDING;
+  const isSuccess = currentStep === AppStep.SUCCESS;
+
   return (
     <Layout 
       onNavigate={setCurrentStep} 
-      hideNav={currentStep === AppStep.SUCCESS}
+      hideNav={isLanding || isSuccess}
+      hideFooter={isLanding || isSuccess}
     >
       {renderContent()}
     </Layout>
