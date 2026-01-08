@@ -1,50 +1,26 @@
 
 import React, { useRef, useState } from 'react';
 import Button from '../components/Button';
-import { AppStep } from '../types';
+import TemplateModal from '../components/TemplateModal';
+import { AppStep, Template } from '../types';
 import { PACKAGES, TEMPLATES } from '../constants';
 
 interface LandingPageProps {
   onStart: () => void;
-  onNavigate: (step: AppStep) => void;
+  onNavigate: (step: AppStep, section?: string) => void;
 }
 
 const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
   const [showAllTemplates, setShowAllTemplates] = useState(false);
+  const [selectedPreview, setSelectedPreview] = useState<Template | null>(null);
   
   const heroRef = useRef<HTMLElement>(null);
   const howItWorksRef = useRef<HTMLElement>(null);
   const templatesRef = useRef<HTMLElement>(null);
   const pricingRef = useRef<HTMLElement>(null);
 
-  const scrollToSection = (ref: React.RefObject<HTMLElement>) => {
-    ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
   return (
     <div className="min-h-screen bg-white">
-      {/* Navbar Overlay */}
-      <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-stone-100 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div 
-              className="flex items-center space-x-2 cursor-pointer group"
-              onClick={() => scrollToSection(heroRef)}
-            >
-              <span className="text-lg opacity-60 group-hover:opacity-100 transition-opacity">🐾</span>
-              <span className="text-lg font-serif font-bold text-stone-800 tracking-tight">Eternal Paws</span>
-            </div>
-            <div className="hidden md:flex items-center space-x-10 text-xs font-bold uppercase tracking-widest text-stone-400">
-              <button onClick={() => scrollToSection(howItWorksRef)} className="hover:text-stone-900 transition-colors">How it works</button>
-              <button onClick={() => scrollToSection(templatesRef)} className="hover:text-stone-900 transition-colors">Templates</button>
-              <button onClick={() => scrollToSection(pricingRef)} className="hover:text-stone-900 transition-colors">Pricing</button>
-              <Button onClick={onStart} className="px-6 py-2.5 text-[10px]">Create Tribute</Button>
-            </div>
-            <button className="md:hidden text-stone-800 font-bold text-xs uppercase tracking-widest" onClick={onStart}>Start</button>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <section ref={heroRef} className="min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-24 bg-gradient-to-b from-stone-50 to-white relative overflow-hidden">
         <div className="max-w-4xl mx-auto text-center relative z-10 mb-16 animate-in fade-in slide-in-from-bottom-8 duration-1000">
@@ -58,7 +34,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-8">
             <Button onClick={onStart} className="text-lg px-12 py-5 shadow-xl">Create a Memorial</Button>
-            <Button variant="outline" onClick={() => scrollToSection(templatesRef)} className="text-lg px-12 py-5">View Styles</Button>
+            <Button variant="outline" onClick={() => templatesRef.current?.scrollIntoView({ behavior: 'smooth' })} className="text-lg px-12 py-5">View Styles</Button>
           </div>
           <p className="text-[10px] text-stone-400 font-bold uppercase tracking-[0.2em] mb-12">
             No accounts • One-time payment • Private delivery link
@@ -66,13 +42,13 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
 
           {/* Preview Strip */}
           <div className="max-w-2xl mx-auto grid grid-cols-3 gap-3 p-2 bg-white/50 backdrop-blur rounded-2xl border border-stone-100 shadow-sm opacity-80 group hover:opacity-100 transition-opacity">
-            <div className="aspect-video bg-stone-100 rounded-lg overflow-hidden flex items-center justify-center">
+            <div className="aspect-video bg-stone-100 rounded-lg overflow-hidden flex items-center justify-center border border-stone-100">
                <div className="w-full h-full bg-gradient-to-br from-stone-100 to-stone-200"></div>
             </div>
-            <div className="aspect-video bg-stone-100 rounded-lg overflow-hidden flex items-center justify-center border-x border-white">
+            <div className="aspect-video bg-stone-100 rounded-lg overflow-hidden flex items-center justify-center border border-stone-100">
                <div className="w-full h-full bg-gradient-to-br from-stone-200 to-stone-100"></div>
             </div>
-            <div className="aspect-video bg-stone-100 rounded-lg overflow-hidden flex items-center justify-center">
+            <div className="aspect-video bg-stone-100 rounded-lg overflow-hidden flex items-center justify-center border border-stone-100">
                <div className="w-full h-full bg-gradient-to-br from-stone-100 to-stone-200"></div>
             </div>
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
@@ -86,7 +62,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
       </section>
 
       {/* How It Works */}
-      <section ref={howItWorksRef} className="py-32 px-6 bg-white border-y border-stone-50">
+      <section id="how-it-works" ref={howItWorksRef} className="py-32 px-6 bg-white border-y border-stone-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-24">
             <h2 className="text-4xl md:text-5xl font-serif text-stone-800 mb-6">Refined Creation</h2>
@@ -114,7 +90,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
       </section>
 
       {/* Templates Section */}
-      <section ref={templatesRef} className="py-32 px-6 bg-stone-50">
+      <section id="templates" ref={templatesRef} className="py-32 px-6 bg-stone-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-serif text-stone-800 mb-6">Tasteful Styles</h2>
@@ -122,19 +98,26 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {TEMPLATES.slice(0, 3).map((template) => (
-              <div key={template.id} className="bg-white rounded-[2.5rem] overflow-hidden border border-stone-100 shadow-sm hover:shadow-xl transition-all duration-500 group">
+              <button 
+                key={template.id} 
+                onClick={() => setSelectedPreview(template)}
+                className="bg-white rounded-[2.5rem] overflow-hidden border border-stone-100 shadow-sm hover:shadow-xl transition-all duration-500 group text-left focus:outline-none focus:ring-2 focus:ring-stone-400"
+              >
                 <div className={`${template.previewColor} aspect-video relative overflow-hidden flex items-center justify-center`}>
                   <div className="w-3/4 h-3/4 border border-stone-900/10 rounded flex items-center justify-center text-[10px] font-bold text-stone-400 uppercase tracking-widest group-hover:scale-105 transition-transform duration-700">
-                    {template.name} Visuals
+                    Click to Preview
                   </div>
                 </div>
                 <div className="p-10">
-                  <h3 className="text-xl font-serif font-bold text-stone-800 mb-4">{template.name}</h3>
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-xl font-serif font-bold text-stone-800">{template.name}</h3>
+                    <span className="text-stone-300 group-hover:text-stone-900 transition-colors">→</span>
+                  </div>
                   <p className="text-sm text-stone-500 leading-relaxed font-light">
                     {template.description}
                   </p>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
           <div className="text-center mt-16">
@@ -144,7 +127,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
       </section>
 
       {/* Pricing Section */}
-      <section ref={pricingRef} className="py-32 px-6 bg-white">
+      <section id="pricing" ref={pricingRef} className="py-32 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-24">
             <h2 className="text-4xl md:text-5xl font-serif text-stone-800 mb-6">Simple Pricing</h2>
@@ -167,11 +150,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
                 <Button variant={key === 'premium' ? 'primary' : 'outline'} className="w-full" onClick={onStart}>Select {key}</Button>
               </div>
             ))}
-          </div>
-          <div className="text-center mt-20">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400">
-              Private, secure, no subscriptions • Files deleted after 30 days
-            </p>
           </div>
         </div>
       </section>
@@ -196,7 +174,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
         </div>
       </section>
 
-      {/* Templates Modal */}
+      {/* Full Catalog Modal */}
       {showAllTemplates && (
         <div className="fixed inset-0 z-[100] bg-white overflow-y-auto p-8 animate-in fade-in zoom-in duration-300">
           <div className="max-w-6xl mx-auto">
@@ -206,13 +184,17 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
               {TEMPLATES.map((template) => (
-                <div key={template.id} className="group">
+                <button 
+                  key={template.id} 
+                  className="group text-left focus:outline-none"
+                  onClick={() => setSelectedPreview(template)}
+                >
                   <div className={`${template.previewColor} aspect-video rounded-3xl mb-6 flex items-center justify-center border border-stone-50 shadow-sm transition-all group-hover:shadow-md`}>
-                     <span className="text-[10px] font-bold text-stone-300 uppercase tracking-widest">{template.name}</span>
+                     <span className="text-[10px] font-bold text-stone-300 uppercase tracking-widest group-hover:scale-110 transition-transform">Preview {template.name}</span>
                   </div>
                   <h3 className="text-lg font-serif font-bold text-stone-800 mb-2">{template.name}</h3>
                   <p className="text-sm text-stone-500 leading-relaxed">{template.description}</p>
-                </div>
+                </button>
               ))}
             </div>
             <div className="mt-20 text-center pb-20">
@@ -220,6 +202,15 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Preview Modal */}
+      {selectedPreview && (
+        <TemplateModal 
+          template={selectedPreview} 
+          onClose={() => setSelectedPreview(null)}
+          onSelect={() => onStart()}
+        />
       )}
     </div>
   );

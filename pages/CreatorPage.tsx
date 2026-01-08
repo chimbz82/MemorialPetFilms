@@ -1,19 +1,21 @@
 
 import React, { useState } from 'react';
-import { AppStep, MemorialData, PackageType } from '../types';
+import { AppStep, MemorialData, PackageType, Template } from '../types';
 import FileUpload from '../components/FileUpload';
 import AIDescriptionHelper from '../components/AIDescriptionHelper';
 import Button from '../components/Button';
+import TemplateModal from '../components/TemplateModal';
 import { TEMPLATES, LIBRARY_TRACKS, PACKAGES } from '../constants';
 
 interface CreatorPageProps {
   onSuccess: () => void;
-  onNavigate: (step: AppStep) => void;
+  onNavigate: (step: AppStep, section?: string) => void;
 }
 
 const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
   const [currentSubStep, setCurrentSubStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [selectedPreview, setSelectedPreview] = useState<Template | null>(null);
   const [data, setData] = useState<MemorialData>({
     petName: '',
     birthDate: '',
@@ -42,7 +44,6 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    // Simulate API call for order processing
     await new Promise(resolve => setTimeout(resolve, 2000));
     setLoading(false);
     onSuccess();
@@ -67,9 +68,6 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
                 Continue to Details
               </Button>
             </div>
-            {data.files.length < 5 && data.files.length > 0 && (
-              <p className="text-red-500 text-sm mt-4 text-right">Please select at least 5 files.</p>
-            )}
           </div>
         );
       case 2:
@@ -144,15 +142,22 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
                 <h4 className="font-serif text-xl font-bold text-stone-800 mb-4">Template Selection</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {TEMPLATES.map(t => (
-                    <div 
+                    <button 
                       key={t.id}
                       onClick={() => handleDataChange('template', t.id)}
-                      className={`cursor-pointer rounded-2xl border-2 p-4 transition-all ${data.template === t.id ? 'border-stone-800 bg-stone-50' : 'border-stone-100 hover:border-stone-300'}`}
+                      className={`relative group cursor-pointer rounded-2xl border-2 p-4 transition-all text-left ${data.template === t.id ? 'border-stone-800 bg-stone-50' : 'border-stone-100 hover:border-stone-300'}`}
                     >
-                      <div className={`${t.previewColor} h-24 rounded-lg mb-3`}></div>
+                      <div className={`${t.previewColor} h-24 rounded-lg mb-3 flex items-center justify-center`}>
+                        <span 
+                          className="opacity-0 group-hover:opacity-100 text-[10px] uppercase font-bold tracking-widest bg-white/80 px-2 py-1 rounded transition-opacity"
+                          onClick={(e) => { e.stopPropagation(); setSelectedPreview(t); }}
+                        >
+                          Preview
+                        </span>
+                      </div>
                       <h5 className="font-bold text-sm text-stone-800">{t.name}</h5>
                       <p className="text-[10px] text-stone-500 leading-tight">{t.description}</p>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -175,11 +180,11 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
                   ))}
                   
                   <div className="pt-4 border-t border-stone-200">
-                    <p className="text-sm text-stone-500 mb-2">Or upload your own meaningful song (Premium only)</p>
+                    <p className="text-sm text-stone-500 mb-2">Or upload your own song</p>
                     <input 
                       type="file" 
                       accept="audio/*" 
-                      className="text-sm text-stone-800 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200"
+                      className="text-xs text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200"
                     />
                   </div>
                 </div>
@@ -238,17 +243,17 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
                 <h4 className="font-serif text-xl font-bold text-stone-800 mb-4">Choose Package</h4>
                 <div className="space-y-3">
                   {Object.entries(PACKAGES).map(([key, pkg]) => (
-                    <div 
+                    <button 
                       key={key}
                       onClick={() => handleDataChange('package', key)}
-                      className={`p-4 rounded-2xl border-2 cursor-pointer transition-all ${data.package === key ? 'border-stone-800 bg-stone-50' : 'border-stone-100 hover:border-stone-300'}`}
+                      className={`w-full p-4 rounded-2xl border-2 transition-all text-left ${data.package === key ? 'border-stone-800 bg-stone-50' : 'border-stone-100 hover:border-stone-300'}`}
                     >
                       <div className="flex justify-between items-center mb-1">
                         <span className="font-bold text-sm text-stone-800">{pkg.name}</span>
                         <span className="font-serif font-bold text-stone-800">£{pkg.price}</span>
                       </div>
                       <div className="text-[10px] text-stone-500">{pkg.delivery} delivery</div>
-                    </div>
+                    </button>
                   ))}
                 </div>
                 
@@ -302,6 +307,15 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
         <div className="card bg-white p-8 md:p-12 rounded-[2rem] shadow-sm border border-stone-100">
           {renderStep()}
         </div>
+
+        {selectedPreview && (
+          <TemplateModal 
+            template={selectedPreview} 
+            onClose={() => setSelectedPreview(null)}
+            onSelect={(id) => handleDataChange('template', id)}
+            isSelected={data.template === selectedPreview.id}
+          />
+        )}
       </div>
     </div>
   );

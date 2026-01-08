@@ -6,7 +6,12 @@ export enum AppStep {
   STYLE = 'STYLE',
   CHECKOUT = 'CHECKOUT',
   SUCCESS = 'SUCCESS',
-  LEGAL = 'LEGAL'
+  LEGAL = 'LEGAL',
+  TERMS = 'TERMS',
+  REFUNDS = 'REFUNDS',
+  MISSION = 'MISSION',
+  FAQ = 'FAQ',
+  CONTACT = 'CONTACT'
 }
 
 export enum PackageType {
@@ -35,6 +40,7 @@ export interface Template {
   name: string;
   description: string;
   previewColor: string;
+  longDescription?: string;
 }
 
 export interface LibraryTrack {

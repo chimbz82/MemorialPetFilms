@@ -4,7 +4,7 @@ import { AppStep } from '../types';
 
 interface LayoutProps {
   children: React.ReactNode;
-  onNavigate: (step: AppStep) => void;
+  onNavigate: (step: AppStep, section?: string) => void;
   hideNav?: boolean;
   hideFooter?: boolean;
 }
@@ -16,31 +16,35 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFoot
         <nav className="bg-white/80 backdrop-blur-md border-b border-stone-200 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
-              <div 
+              <button 
                 className="flex items-center cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 rounded-lg px-2 py-1"
                 onClick={() => onNavigate(AppStep.LANDING)}
-                tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && onNavigate(AppStep.LANDING)}
               >
                 <span className="text-xl mr-2 grayscale group-hover:grayscale-0 transition-all duration-300">🐾</span>
                 <span className="text-lg font-serif font-bold text-stone-800 tracking-tight">Eternal Paws</span>
-              </div>
+              </button>
               <div className="hidden md:flex space-x-8 text-sm font-medium">
                 <button 
-                  onClick={() => onNavigate(AppStep.LANDING)} 
-                  className="text-stone-500 hover:text-stone-900 relative py-1 transition-colors focus-visible:outline-none focus-visible:underline underline-offset-4"
+                  onClick={() => onNavigate(AppStep.LANDING, 'how-it-works')} 
+                  className="text-stone-500 hover:text-stone-900 relative py-1 transition-colors"
                 >
                   How it works
                 </button>
                 <button 
-                  onClick={() => onNavigate(AppStep.LANDING)} 
-                  className="text-stone-500 hover:text-stone-900 relative py-1 transition-colors focus-visible:outline-none focus-visible:underline underline-offset-4"
+                  onClick={() => onNavigate(AppStep.LANDING, 'templates')} 
+                  className="text-stone-500 hover:text-stone-900 relative py-1 transition-colors"
+                >
+                  Templates
+                </button>
+                <button 
+                  onClick={() => onNavigate(AppStep.LANDING, 'pricing')} 
+                  className="text-stone-500 hover:text-stone-900 relative py-1 transition-colors"
                 >
                   Pricing
                 </button>
                 <button 
                   onClick={() => onNavigate(AppStep.UPLOAD)}
-                  className="bg-stone-900 text-white px-5 py-2 rounded-full hover:bg-stone-800 transition-all shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-500 focus-visible:ring-offset-2"
+                  className="bg-stone-900 text-white px-5 py-2 rounded-full hover:bg-stone-800 transition-all shadow-sm active:scale-95"
                 >
                   Create Tribute
                 </button>
@@ -71,16 +75,16 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFoot
                 <h4 className="font-bold text-stone-900 mb-6 uppercase tracking-widest text-[10px]">Support</h4>
                 <ul className="space-y-4 text-stone-500 text-sm">
                   <li><button onClick={() => onNavigate(AppStep.LEGAL)} className="hover:text-stone-900 transition-colors">Privacy Policy</button></li>
-                  <li><button onClick={() => onNavigate(AppStep.LEGAL)} className="hover:text-stone-900 transition-colors">Terms of Service</button></li>
-                  <li><button onClick={() => onNavigate(AppStep.LEGAL)} className="hover:text-stone-900 transition-colors">Refund Policy</button></li>
+                  <li><button onClick={() => onNavigate(AppStep.TERMS)} className="hover:text-stone-900 transition-colors">Terms of Service</button></li>
+                  <li><button onClick={() => onNavigate(AppStep.REFUNDS)} className="hover:text-stone-900 transition-colors">Refund Policy</button></li>
+                  <li><button onClick={() => onNavigate(AppStep.FAQ)} className="hover:text-stone-900 transition-colors">FAQs</button></li>
                 </ul>
               </div>
               <div>
                 <h4 className="font-bold text-stone-900 mb-6 uppercase tracking-widest text-[10px]">Company</h4>
                 <ul className="space-y-4 text-stone-500 text-sm">
-                  <li><button className="hover:text-stone-900 transition-colors">Contact Us</button></li>
-                  <li><button className="hover:text-stone-900 transition-colors">Our Mission</button></li>
-                  <li><button className="hover:text-stone-900 transition-colors">FAQs</button></li>
+                  <li><button onClick={() => onNavigate(AppStep.CONTACT)} className="hover:text-stone-900 transition-colors">Contact Us</button></li>
+                  <li><button onClick={() => onNavigate(AppStep.MISSION)} className="hover:text-stone-900 transition-colors">Our Mission</button></li>
                 </ul>
               </div>
             </div>

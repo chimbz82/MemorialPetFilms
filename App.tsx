@@ -9,11 +9,29 @@ import { AppStep } from './types';
 
 const App: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<AppStep>(AppStep.LANDING);
+  const [targetSection, setTargetSection] = useState<string | null>(null);
 
   // Sync scroll position on navigation
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [currentStep]);
+    if (targetSection && currentStep === AppStep.LANDING) {
+      const element = document.getElementById(targetSection);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        setTargetSection(null);
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [currentStep, targetSection]);
+
+  const handleNavigate = (step: AppStep, section?: string) => {
+    if (section) {
+      setTargetSection(section);
+      setCurrentStep(AppStep.LANDING);
+    } else {
+      setCurrentStep(step);
+    }
+  };
 
   const renderContent = () => {
     switch (currentStep) {
@@ -21,7 +39,7 @@ const App: React.FC = () => {
         return (
           <LandingPage 
             onStart={() => setCurrentStep(AppStep.UPLOAD)} 
-            onNavigate={setCurrentStep}
+            onNavigate={handleNavigate}
           />
         );
       case AppStep.UPLOAD:
@@ -31,15 +49,20 @@ const App: React.FC = () => {
         return (
           <CreatorPage 
             onSuccess={() => setCurrentStep(AppStep.SUCCESS)} 
-            onNavigate={setCurrentStep}
+            onNavigate={handleNavigate}
           />
         );
       case AppStep.SUCCESS:
-        return <SuccessPage onNavigate={setCurrentStep} />;
+        return <SuccessPage onNavigate={handleNavigate} />;
       case AppStep.LEGAL:
-        return <LegalPage />;
+      case AppStep.TERMS:
+      case AppStep.REFUNDS:
+      case AppStep.MISSION:
+      case AppStep.FAQ:
+      case AppStep.CONTACT:
+        return <LegalPage subType={currentStep} onNavigate={handleNavigate} />;
       default:
-        return <LandingPage onStart={() => setCurrentStep(AppStep.UPLOAD)} onNavigate={setCurrentStep} />;
+        return <LandingPage onStart={() => setCurrentStep(AppStep.UPLOAD)} onNavigate={handleNavigate} />;
     }
   };
 
@@ -48,9 +71,9 @@ const App: React.FC = () => {
 
   return (
     <Layout 
-      onNavigate={setCurrentStep} 
-      hideNav={isLanding || isSuccess}
-      hideFooter={isLanding || isSuccess}
+      onNavigate={handleNavigate} 
+      hideNav={isSuccess}
+      hideFooter={isSuccess}
     >
       {renderContent()}
     </Layout>
