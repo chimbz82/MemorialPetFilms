@@ -168,8 +168,11 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
                   {LIBRARY_TRACKS.map(track => (
                     <div 
                       key={track.id}
-                      onClick={() => handleMusicChange('libraryTrackId', track.id)}
-                      className={`flex items-center justify-between p-4 rounded-2xl border-2 cursor-pointer transition-all ${data.music.libraryTrackId === track.id ? 'border-stone-800 bg-stone-50' : 'border-stone-100 hover:border-stone-300'}`}
+                      onClick={() => {
+                        handleMusicChange('libraryTrackId', track.id);
+                        handleMusicChange('source', 'library');
+                      }}
+                      className={`flex items-center justify-between p-4 rounded-2xl border-2 cursor-pointer transition-all ${data.music.source === 'library' && data.music.libraryTrackId === track.id ? 'border-stone-800 bg-stone-50' : 'border-stone-100 hover:border-stone-300'}`}
                     >
                       <div className="flex items-center">
                         <span className="text-lg mr-3">🎵</span>
@@ -184,8 +187,17 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
                     <input 
                       type="file" 
                       accept="audio/*" 
+                      onChange={(e) => {
+                        if (e.target.files?.[0]) {
+                          handleMusicChange('uploadedAudio', e.target.files[0]);
+                          handleMusicChange('source', 'upload');
+                        }
+                      }}
                       className="text-xs text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-stone-700 hover:file:bg-stone-200"
                     />
+                    <p className="text-[10px] text-stone-400 mt-2 italic leading-relaxed">
+                      When uploading your own music, please ensure you have the necessary rights or permission to use the track in your memorial.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -224,7 +236,12 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
                     </div>
                     <div className="flex justify-between">
                       <dt className="text-stone-500">Sound</dt>
-                      <dd className="font-medium text-stone-800 capitalize">{data.music.libraryTrackId?.replace('-', ' ') || 'Custom Upload'}</dd>
+                      <dd className="font-medium text-stone-800 capitalize">
+                        {data.music.source === 'library' 
+                          ? (LIBRARY_TRACKS.find(t => t.id === data.music.libraryTrackId)?.title || 'Selected Track')
+                          : (data.music.uploadedAudio?.name || 'Custom Upload')
+                        }
+                      </dd>
                     </div>
                   </dl>
                 </div>

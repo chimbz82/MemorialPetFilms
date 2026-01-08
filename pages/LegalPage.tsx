@@ -25,16 +25,21 @@ const LegalPage: React.FC<LegalPageProps> = ({ subType, onNavigate }) => {
             <p className="text-stone-600 leading-relaxed">
               You are solely responsible for the content you upload. By using our service, you confirm that you have the legal right to use all uploaded photos, videos, and music. 
             </p>
-            <p className="text-stone-600 leading-relaxed font-bold">
-              Important: If you choose to upload your own audio file, you must ensure you hold the necessary licenses or permissions from the copyright owner. Eternal Paws accepts no liability for copyright infringement resulting from user-uploaded media.
+
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">3. Music and Audio Rights</h3>
+            <p className="text-stone-600 leading-relaxed">
+              You may choose to upload your own audio files or select a track from our provided library. If you choose to upload your own music, you are responsible for ensuring you have the necessary rights or permissions from the copyright owner to use that audio. 
+            </p>
+            <p className="text-stone-600 leading-relaxed">
+              Eternal Paws acts solely as a technical service provider for the private processing of your media. We do not publicly host, share, or redistribute your finished memorial video, and we do not claim any ownership over your uploaded content.
             </p>
 
-            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">3. Prohibited Content</h3>
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">4. Prohibited Content</h3>
             <p className="text-stone-600 leading-relaxed">
               We maintain a respectful environment. You may not upload content that is illegal, harmful, offensive, or infringes on the privacy or intellectual property of others. We reserve the right to refuse service and issue a refund if uploaded content violates these standards.
             </p>
 
-            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">4. Payment and Delivery</h3>
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">5. Payment and Delivery</h3>
             <p className="text-stone-600 leading-relaxed">
               Payments are one-off and processed securely at the point of order. Delivery times depend on the package selected:
             </p>
@@ -44,50 +49,14 @@ const LegalPage: React.FC<LegalPageProps> = ({ subType, onNavigate }) => {
               <li>Rush: Priority delivery within 1 hour.</li>
             </ul>
 
-            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">5. Limitation of Liability</h3>
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">6. Limitation of Liability</h3>
             <p className="text-stone-600 leading-relaxed">
               While we strive for perfection, we provide the service on an "as is" basis. Our total liability is limited to the amount paid for the service. We are not liable for any emotional distress or indirect losses arising from the use of our service.
             </p>
 
-            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">6. Governing Law</h3>
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">7. Governing Law</h3>
             <p className="text-stone-600 leading-relaxed">
               These terms are governed by the laws of England and Wales.
-            </p>
-          </article>
-        );
-
-      case AppStep.LEGAL: // Defaulting to Privacy Policy if generic 'LEGAL' is called
-      case AppStep.LANDING: // Safe fallback
-        return (
-          <article className="prose prose-stone max-w-none">
-            <h1 className="text-4xl font-serif font-bold text-stone-800 mb-8">Privacy Policy</h1>
-            <p className="text-stone-600 leading-relaxed">
-              At Eternal Paws, we understand the sensitive nature of your memories. We are committed to protecting your privacy in accordance with UK GDPR.
-            </p>
-
-            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">Data We Collect</h3>
-            <p className="text-stone-600 leading-relaxed">
-              We collect only the information necessary to fulfill your order: your email address (for delivery) and the media files you upload for the video. We do not require or create user accounts.
-            </p>
-
-            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">Storage and Security</h3>
-            <p className="text-stone-600 leading-relaxed">
-              Your files are stored in secure, encrypted cloud storage. Access is strictly limited to our automated rendering systems and, occasionally, a member of our technical team to resolve specific rendering issues. No public access is ever permitted.
-            </p>
-
-            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">30-Day Retention Policy</h3>
-            <p className="text-stone-600 leading-relaxed">
-              To ensure your privacy, all uploaded photos, videos, and audio files, as well as the final rendered memorial video, are automatically and permanently deleted from our servers 30 days after your order is completed. We recommend you download and back up your video promptly.
-            </p>
-
-            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">Your Rights</h3>
-            <p className="text-stone-600 leading-relaxed">
-              Under UK GDPR, you have the right to access the data we hold or request its immediate deletion before the 30-day window. As we do not sell data, you will never receive marketing from third parties as a result of using Eternal Paws.
-            </p>
-
-            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">Contact</h3>
-            <p className="text-stone-600 leading-relaxed">
-              For data requests, please contact privacy@eternalpaws.com.
             </p>
           </article>
         );
@@ -97,27 +66,54 @@ const LegalPage: React.FC<LegalPageProps> = ({ subType, onNavigate }) => {
           <article className="prose prose-stone max-w-none">
             <h1 className="text-4xl font-serif font-bold text-stone-800 mb-8">Refund Policy</h1>
             <p className="text-stone-600 leading-relaxed">
-              Because our memorial videos are bespoke, digital products, our refund policy reflects the custom nature of the work.
+              At Eternal Paws, we understand that creating a memorial video is a deeply personal and often difficult task. We are committed to providing a respectful service that honours your companion.
+            </p>
+            <p className="text-stone-600 leading-relaxed">
+              Because our videos are bespoke digital products—personalised specifically for you using your own media—our refund policy is designed to reflect the custom nature of the service while remaining fair to all parties.
             </p>
 
-            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">Custom Service Exclusions</h3>
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">Personalised Digital Goods</h3>
             <p className="text-stone-600 leading-relaxed">
-              Once rendering has commenced, we are unable to offer a refund for "change of mind." The creation of your video involves significant processing power and designer resources allocated to your specific files.
+              Under UK consumer law, the standard 14-day "cooling off" period and right to cancel do not apply to goods that are made to the consumer's specifications or are clearly personalised. Furthermore, work on your memorial video begins shortly after your payment is confirmed to ensure we meet our delivery deadlines.
             </p>
 
-            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">Eligibility for Refund</h3>
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">When a Refund is Available</h3>
             <p className="text-stone-600 leading-relaxed">
-              A full refund will be issued in the following circumstances:
+              We will issue a full refund in the following circumstances:
             </p>
             <ul className="list-disc pl-6 text-stone-600 space-y-2">
-              <li>Technical failure: If our systems are unable to complete your video render.</li>
-              <li>Non-delivery: If you do not receive your download link within the promised timeframe.</li>
-              <li>Major defect: If the final video has clear technical corruption or rendering errors.</li>
+              <li><strong>Non-delivery:</strong> If payment has been successfully taken but your video download link is not delivered within the timeframe specified for your package.</li>
+              <li><strong>Technical Failure:</strong> If a technical error on our side prevents the video from being rendered or results in a severely corrupted file that cannot be viewed.</li>
+              <li><strong>Unfulfilled Service:</strong> If we exercise our right to refuse service due to unsuitable content prior to any rendering work commencing.</li>
             </ul>
 
-            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">How to Request</h3>
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">When a Refund is Not Available</h3>
             <p className="text-stone-600 leading-relaxed">
-              To request a refund, please email support@eternalpaws.com with your order details. We aim to respond to all refund requests within 48 hours.
+              We are unable to offer refunds in the following instances:
+            </p>
+            <ul className="list-disc pl-6 text-stone-600 space-y-2">
+              <li><strong>Rendering in Progress:</strong> Once the technical process of rendering your video has begun, significant compute resources have been used and a refund is no longer possible.</li>
+              <li><strong>Change of Mind:</strong> We cannot offer refunds if you decide you no longer want the video after it has been submitted for processing.</li>
+              <li><strong>User Error:</strong> This includes mistakes in the pet's name, dates, or messages provided by the user, or the submission of low-quality or blurry photos.</li>
+              <li><strong>Copyright Issues:</strong> If a video is completed but you later find you did not have the rights to use the uploaded media.</li>
+            </ul>
+
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">How to Request a Refund</h3>
+            <p className="text-stone-600 leading-relaxed">
+              If you believe you are entitled to a refund based on the criteria above, please contact us at <strong>support@eternalpaws.com</strong>.
+            </p>
+            <p className="text-stone-600 leading-relaxed">
+              Please include your order reference number (provided in your confirmation email) and a clear description of the issue.
+            </p>
+
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">Processing Timeframes</h3>
+            <p className="text-stone-600 leading-relaxed">
+              We aim to respond to all refund requests within 2 business days. If a refund is approved, it will be processed immediately. However, it may take between 5 to 10 business days to appear in your account, depending on your bank's processing times.
+            </p>
+
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">Governing Law</h3>
+            <p className="text-stone-600 leading-relaxed">
+              This Refund Policy is governed by the laws of England and Wales.
             </p>
           </article>
         );
@@ -210,8 +206,41 @@ const LegalPage: React.FC<LegalPageProps> = ({ subType, onNavigate }) => {
           </article>
         );
 
+      case AppStep.LEGAL: 
       default:
-        return null;
+        return (
+          <article className="prose prose-stone max-w-none">
+            <h1 className="text-4xl font-serif font-bold text-stone-800 mb-8">Privacy Policy</h1>
+            <p className="text-stone-600 leading-relaxed">
+              At Eternal Paws, we understand the sensitive nature of your memories. We are committed to protecting your privacy in accordance with UK GDPR.
+            </p>
+
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">Data We Collect</h3>
+            <p className="text-stone-600 leading-relaxed">
+              We collect only the information necessary to fulfill your order: your email address (for delivery) and the media files you upload for the video. We do not require or create user accounts.
+            </p>
+
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">Storage and Security</h3>
+            <p className="text-stone-600 leading-relaxed">
+              Your files are stored in secure, encrypted cloud storage. Access is strictly limited to our automated rendering systems and, occasionally, a member of our technical team to resolve specific rendering issues. No public access is ever permitted.
+            </p>
+
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">30-Day Retention Policy</h3>
+            <p className="text-stone-600 leading-relaxed">
+              To ensure your privacy, all uploaded photos, videos, and audio files, as well as the final rendered memorial video, are automatically and permanently deleted from our servers 30 days after your order is completed. We recommend you download and back up your video promptly.
+            </p>
+
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">Your Rights</h3>
+            <p className="text-stone-600 leading-relaxed">
+              Under UK GDPR, you have the right to access the data we hold or request its immediate deletion before the 30-day window. As we do not sell data, you will never receive marketing from third parties as a result of using Eternal Paws.
+            </p>
+
+            <h3 className="text-xl font-serif font-bold text-stone-800 mt-8 mb-4">Contact</h3>
+            <p className="text-stone-600 leading-relaxed">
+              For data requests, please contact privacy@eternalpaws.com.
+            </p>
+          </article>
+        );
     }
   };
 
