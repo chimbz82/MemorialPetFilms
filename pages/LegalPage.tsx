@@ -100,7 +100,7 @@ const LegalPage: React.FC<LegalPageProps> = ({ subType, onNavigate }) => {
 
             <h3 className="text-xl font-serif font-bold text-brand-heading mt-8 mb-4">How to Request a Refund</h3>
             <p className="text-brand-body leading-relaxed">
-              If you believe you are entitled to a refund based on the criteria above, please contact us at <strong>support@memorialpetfilms.com</strong>.
+              If you believe you are entitled to a refund based on the criteria above, please contact us at <a href="mailto:MemorialPetFilms@protonmail.com" className="font-bold text-brand-heading hover:underline">MemorialPetFilms@protonmail.com</a>.
             </p>
             <p className="text-brand-body leading-relaxed">
               Please include your order reference number (provided in your confirmation email) and a clear description of the issue.
@@ -130,7 +130,7 @@ const LegalPage: React.FC<LegalPageProps> = ({ subType, onNavigate }) => {
               <div className="space-y-8">
                 <div>
                   <h4 className="text-[10px] font-bold uppercase tracking-widest text-brand-heading/50 mb-2">Support Email</h4>
-                  <p className="text-2xl font-serif font-bold text-brand-heading">support@memorialpetfilms.com</p>
+                  <a href="mailto:MemorialPetFilms@protonmail.com" className="text-2xl font-serif font-bold text-brand-heading hover:underline block">MemorialPetFilms@protonmail.com</a>
                 </div>
                 <div>
                   <h4 className="text-[10px] font-bold uppercase tracking-widest text-brand-heading/50 mb-2">Expected Response Time</h4>
@@ -194,12 +194,12 @@ const LegalPage: React.FC<LegalPageProps> = ({ subType, onNavigate }) => {
                 },
                 { 
                   q: "What if I need help?", 
-                  a: "Simply email support@memorialpetfilms.com. We are a small, dedicated team and we are here to help." 
+                  a: <span>Simply email <a href="mailto:MemorialPetFilms@protonmail.com" className="text-brand-heading font-bold hover:underline">MemorialPetFilms@protonmail.com</a>. We are a small, dedicated team and we are here to help.</span>
                 }
               ].map((faq, i) => (
                 <div key={i} className="bg-brand-section/20 p-8 rounded-3xl border border-brand-section">
                   <h3 className="font-serif font-bold text-lg text-brand-heading mb-3">{faq.q}</h3>
-                  <p className="text-brand-body/70 text-sm leading-relaxed">{faq.a}</p>
+                  <div className="text-brand-body/70 text-sm leading-relaxed">{faq.a}</div>
                 </div>
               ))}
             </div>
@@ -237,7 +237,7 @@ const LegalPage: React.FC<LegalPageProps> = ({ subType, onNavigate }) => {
 
             <h3 className="text-xl font-serif font-bold text-brand-heading mt-8 mb-4">Contact</h3>
             <p className="text-brand-body leading-relaxed">
-              For data requests, please contact privacy@memorialpetfilms.com.
+              For data requests, please contact <a href="mailto:MemorialPetFilms@protonmail.com" className="font-bold text-brand-heading hover:underline">MemorialPetFilms@protonmail.com</a>.
             </p>
           </article>
         );
