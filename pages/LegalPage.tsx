@@ -145,18 +145,21 @@ const LegalPage: React.FC<LegalPageProps> = ({ subType, onNavigate }) => {
         return (
           <article className="prose prose-stone max-w-none">
             <h1 className="text-4xl font-serif font-bold text-brand-heading mb-8">Our Mission</h1>
-            <p className="text-2xl font-serif italic text-brand-body/60 mb-12 leading-relaxed">
-              "To honour the deep, silent bond between humans and their companions through art and dignity."
-            </p>
             <div className="space-y-6 text-brand-body/70 leading-relaxed">
               <p>
-                Memorial Pet Films was born from a simple observation: the digital tools available to memorialise our pets often felt cluttered, corporate, or overly complex. We believed there was a need for something different—something quiet.
+                Memorial Pet Films was created to help people remember a pet who was once truly part of their life, and who shared in so many everyday moments.
               </p>
               <p>
-                Our mission is to provide a service that prioritises dignity and simplicity. We don't believe in emotional manipulation or corporate buzzwords. Instead, we focus on high-quality design and uncompromising privacy.
+                When a companion is gone, the silence they leave behind can feel heavy. We believe that creating something to honour that life should feel gentle, not complicated.
               </p>
               <p>
-                By removing the need for accounts and subscriptions, we ensure that your focus remains exactly where it should be: on the life and legacy of the companion you loved.
+                That’s why we focus on turning your photos, music, and memories into a carefully made memorial film — created privately, delivered with care, and never rushed.
+              </p>
+              <p>
+                No accounts. No subscriptions. No pressure.
+              </p>
+              <p>
+                Just a quiet way to remember a friend who meant more than words.
               </p>
             </div>
           </article>
