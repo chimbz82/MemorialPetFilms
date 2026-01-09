@@ -8,13 +8,73 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
+        :root {
+          --bg-main: #FFF2EB;
+          --bg-section: #FFE8CD;
+          --bg-emotion: #FFDCDC;
+
+          --accent-primary: #FFC785;
+          --accent-secondary: #A6D0E4;
+          --accent-soft: #FFA09B;
+          --accent-decorative: #FCC6FF;
+
+          --text-heading: #B87C4C;
+          --text-body: #6B4F3F;
+          --text-muted: rgba(107, 79, 63, 0.7);
+        }
+
         body {
             font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-body);
         }
         h1, h2, h3, .serif {
             font-family: 'Playfair Display', serif;
+            color: var(--text-heading);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: var(--bg-emotion);
+          border-radius: 10px;
+        }
+
+        /* Soft transitions & shadows as requested */
+        .card-shadow {
+          box-shadow: 0 10px 30px -15px rgba(184, 124, 76, 0.1);
+        }
+        
+        button, a {
+          transition: all 0.3s ease;
         }
     </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                main: '#FFF2EB',
+                section: '#FFE8CD',
+                emotion: '#FFDCDC',
+                primary: '#FFC785',
+                secondary: '#A6D0E4',
+                soft: '#FFA09B',
+                decorative: '#FCC6FF',
+                heading: '#B87C4C',
+                body: '#6B4F3F',
+                muted: 'rgba(107, 79, 63, 0.7)',
+              }
+            }
+          }
+        }
+      }
+    </script>
 <script type="importmap">
 {
   "imports": {
@@ -26,7 +86,7 @@
 }
 </script>
 </head>
-<body class="bg-[#FDFCFB] text-[#333333]">
+<body class="bg-brand-main text-brand-body">
     <div id="root"></div>
 </body>
 </html>
