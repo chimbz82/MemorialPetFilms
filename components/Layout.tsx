@@ -80,6 +80,11 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFoot
                 <p className="text-brand-body/70 max-w-sm leading-relaxed text-sm">
                   Memorial Pet Films helps families create private, respectful video tributes to honour the memory of a beloved pet.
                 </p>
+                <div className="mt-6">
+                  <a href="mailto:MemorialPetFilms@protonmail.com" className="text-xs font-bold text-brand-heading/60 hover:text-brand-heading transition-colors flex items-center">
+                    <span className="mr-2">✉</span> MemorialPetFilms@protonmail.com
+                  </a>
+                </div>
               </div>
               <div>
                 <h4 className="font-bold text-brand-heading mb-6 uppercase tracking-widest text-[10px]">Support</h4>

@@ -12,6 +12,10 @@ interface CreatorPageProps {
   onNavigate: (step: AppStep, section?: string) => void;
 }
 
+const MAX_AUDIO_SIZE = 20 * 1024 * 1024; // 20MB
+const ALLOWED_AUDIO_TYPES = ['audio/mpeg', 'audio/mp4', 'audio/wav', 'audio/x-m4a', 'audio/x-wav'];
+const ALLOWED_AUDIO_EXTENSIONS = ['.mp3', '.m4a', '.wav'];
+
 const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
   const [currentSubStep, setCurrentSubStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -40,6 +44,39 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
 
   const handleMusicChange = (field: string, value: any) => {
     setData(prev => ({ ...prev, music: { ...prev.music, [field]: value } }));
+  };
+
+  const handleAudioUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check size
+    if (file.size > MAX_AUDIO_SIZE) {
+      alert('Audio file too large. Maximum size is 20MB.');
+      e.target.value = "";
+      return;
+    }
+
+    // Check extension
+    const ext = file.name.toLowerCase().match(/\.[^.]+$/)?.[0];
+    if (!ext || !ALLOWED_AUDIO_EXTENSIONS.includes(ext)) {
+      alert(`Invalid file type. Only ${ALLOWED_AUDIO_EXTENSIONS.join(', ')} are allowed.`);
+      e.target.value = "";
+      return;
+    }
+
+    // Check MIME type (allowing for variations in browser reporting)
+    const isAllowedType = ALLOWED_AUDIO_TYPES.some(type => file.type.includes(type.split('/')[1])) || 
+                         ALLOWED_AUDIO_TYPES.includes(file.type);
+    
+    if (!isAllowedType && file.type !== "") {
+      alert('Invalid audio format. Please upload MP3, M4A, or WAV files.');
+      e.target.value = "";
+      return;
+    }
+
+    handleMusicChange('uploadedAudio', file);
+    handleMusicChange('source', 'upload');
   };
 
   const handleSubmit = async () => {
@@ -186,13 +223,8 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
                     <p className="text-sm text-brand-body/70 mb-2 font-semibold">Or upload your own song</p>
                     <input 
                       type="file" 
-                      accept="audio/*" 
-                      onChange={(e) => {
-                        if (e.target.files?.[0]) {
-                          handleMusicChange('uploadedAudio', e.target.files[0]);
-                          handleMusicChange('source', 'upload');
-                        }
-                      }}
+                      accept=".mp3,.m4a,.wav" 
+                      onChange={handleAudioUpload}
                       className="text-xs text-brand-body/50 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-brand-section file:text-brand-body hover:file:bg-brand-primary/20"
                     />
                     <p className="text-[10px] text-brand-body/40 mt-3 italic leading-relaxed">
@@ -205,7 +237,7 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
 
             <div className="mt-12 flex justify-between">
               <Button variant="ghost" onClick={prevStep}>Back</Button>
-              <Button disabled={!data.petName} onClick={nextStep}>Style & Music</Button>
+              <Button onClick={nextStep}>Review & Checkout</Button>
             </div>
           </div>
         );
