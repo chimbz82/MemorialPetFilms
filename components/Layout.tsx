@@ -27,7 +27,7 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFoot
                 onClick={(e) => handleNavClick(e, AppStep.LANDING)}
               >
                 <span className="text-xl mr-2 grayscale group-hover:grayscale-0 transition-all duration-300">🐾</span>
-                <span className="text-lg font-serif font-bold text-brand-heading tracking-tight">Eternal Paws</span>
+                <span className="text-lg font-serif font-bold text-brand-heading tracking-tight">Memorial Pet Films</span>
               </a>
               <div className="hidden md:flex space-x-8 text-sm font-semibold items-center z-[70] pointer-events-auto">
                 <a 
@@ -75,10 +75,10 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFoot
               <div className="col-span-1 md:col-span-2">
                 <div className="flex items-center mb-6">
                   <span className="text-xl mr-2 opacity-60">🐾</span>
-                  <span className="text-xl font-serif font-bold text-brand-heading">Eternal Paws</span>
+                  <span className="text-xl font-serif font-bold text-brand-heading">Memorial Pet Films</span>
                 </div>
                 <p className="text-brand-body/70 max-w-sm leading-relaxed text-sm">
-                  Helping families honor their beloved companions with dignified, beautiful video memorials since 2024.
+                  Memorial Pet Films helps families create private, respectful video tributes to honour the memory of a beloved pet.
                 </p>
               </div>
               <div>
@@ -99,7 +99,7 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFoot
               </div>
             </div>
             <div className="mt-16 pt-8 border-t border-brand-emotion/50 text-center text-brand-body/40 text-xs uppercase tracking-widest">
-              © 2024 Eternal Paws. All memories kept safe.
+              © 2026 Memorial Pet Films. All memories kept safe.
             </div>
           </div>
         </footer>

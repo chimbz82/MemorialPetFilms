@@ -25,11 +25,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
       <section ref={heroRef} className="min-h-screen flex flex-col items-center justify-center px-6 pt-32 pb-24 bg-gradient-to-b from-brand-section to-brand-main relative overflow-hidden">
         <div className="max-w-4xl mx-auto text-center relative z-10 mb-16 animate-in fade-in slide-in-from-bottom-8 duration-1000">
           <h1 className="text-5xl md:text-7xl font-serif text-brand-heading mb-8 leading-tight">
-            A Dignified Farewell for<br />
-            <span className="italic opacity-60">Your Dearest Friend</span>
+            A dignified farewell for<br />
+            <span className="italic opacity-60">a beloved pet</span>
           </h1>
           <p className="text-xl text-brand-body mb-12 max-w-2xl mx-auto leading-relaxed font-light">
-            Preserve their legacy with a high-definition video memorial.<br className="hidden md:block" />
+            Create a beautiful memorial film using photos, music, and memories you love.<br className="hidden md:block" />
             Designed for reflection, delivered with care.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-8">
@@ -66,13 +66,13 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-24">
             <h2 className="text-4xl md:text-5xl font-serif text-brand-heading mb-6">Refined Creation</h2>
-            <p className="text-brand-body/70 max-w-xl mx-auto leading-relaxed">A seamless, respectful journey to a lasting tribute.</p>
+            <p className="text-brand-body/70 max-w-xl mx-auto leading-relaxed">A seamless, respectful journey to a lasting film tribute.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-16">
             {[
               { icon: '📷', title: 'Gather Memories', desc: 'Select up to 30 photos or video clips of your companion.' },
               { icon: '🎨', title: 'Tell Their Story', desc: 'Choose a respectful template and gentle background music.' },
-              { icon: '💝', title: 'Private Delivery', desc: 'Your HD video is rendered and delivered securely via email.' },
+              { icon: '💝', title: 'Private Delivery', desc: 'Your HD film is rendered and delivered securely via email.' },
             ].map((item, idx) => (
               <div key={idx} className="relative text-center md:text-left">
                 <div className="text-brand-emotion/40 text-[120px] font-serif absolute -top-16 -left-4 leading-none select-none">0{idx+1}</div>

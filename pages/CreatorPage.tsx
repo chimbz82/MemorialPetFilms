@@ -196,7 +196,7 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
                       className="text-xs text-brand-body/50 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-brand-section file:text-brand-body hover:file:bg-brand-primary/20"
                     />
                     <p className="text-[10px] text-brand-body/40 mt-3 italic leading-relaxed">
-                      When uploading your own music, please ensure you have the necessary rights or permission to use the track in your memorial.
+                      When uploading your own music, please ensure you have the necessary rights or permission to use the track in your memorial film.
                     </p>
                   </div>
                 </div>
@@ -205,7 +205,7 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
 
             <div className="mt-12 flex justify-between">
               <Button variant="ghost" onClick={prevStep}>Back</Button>
-              <Button onClick={nextStep}>Review & Checkout</Button>
+              <Button disabled={!data.petName} onClick={nextStep}>Style & Music</Button>
             </div>
           </div>
         );
