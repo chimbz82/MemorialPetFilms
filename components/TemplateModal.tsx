@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 import { Template } from '../types';
 import Button from './Button';
@@ -97,14 +98,14 @@ const TemplateModal: React.FC<TemplateModalProps> = ({ template, onClose, onSele
 
             <div className="flex flex-col gap-4">
               <Button 
-                className={`py-5 text-lg shadow-lg ${isSelected ? 'scale-95 opacity-80' : 'hover:scale-[1.02]'}`}
+                className={`py-5 text-lg shadow-lg ${isSelected ? 'opacity-80' : 'hover:scale-[1.02]'}`}
                 onClick={() => {
                   onSelect(template.id);
                   onClose();
                 }}
                 variant={isSelected ? "outline" : "primary"}
               >
-                {isSelected ? "Style Currently Selected" : `Select ${template.name}`}
+                {isSelected ? "Currently Selected" : "Use this template"}
               </Button>
               <button 
                 onClick={onClose}
