@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { AppStep, MemorialData, PackageType, Template } from '../types';
 import FileUpload from '../components/FileUpload';
@@ -13,6 +14,7 @@ interface CreatorPageProps {
 
 const MAX_AUDIO_SIZE = 20 * 1024 * 1024; // 20MB
 const ALLOWED_AUDIO_EXTENSIONS = ['.mp3', '.m4a', '.wav'];
+const API_BASE_URL = ''; // Assume relative path for proxy/monorepo or adjust as needed
 
 const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
   const [currentSubStep, setCurrentSubStep] = useState(1);
@@ -20,6 +22,7 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
   const [selectedPreview, setSelectedPreview] = useState<Template | null>(null);
   const [data, setData] = useState<MemorialData>({
     petName: '',
+    email: '',
     birthDate: '',
     passedDate: '',
     message: '',
@@ -72,11 +75,57 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
   };
 
   const handleSubmit = async () => {
+    if (!data.email || !/^\S+@\S+\.\S+$/.test(data.email)) {
+      alert("Please enter a valid email address for delivery.");
+      return;
+    }
+
     setLoading(true);
-    // Simulation of artisan upload/processing initiation
-    await new Promise(resolve => setTimeout(resolve, 2500));
-    setLoading(false);
-    onSuccess();
+    try {
+      // 1. Create the order in the backend
+      const orderResponse = await fetch(`${API_BASE_URL}/api/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          petName: data.petName,
+          template: data.template,
+          music: {
+            source: data.music.source,
+            libraryTrackId: data.music.libraryTrackId
+          },
+          package: data.package,
+          files: data.files.map(f => f.name) // Metadata only for now, files would be uploaded to S3 separately
+        })
+      });
+
+      const orderResult = await orderResponse.json();
+      if (!orderResult.success) throw new Error(orderResult.error || 'Failed to create order');
+
+      // 2. Initiate Stripe Checkout
+      const checkoutResponse = await fetch(`${API_BASE_URL}/api/checkout/create-session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId: orderResult.order.orderId,
+          packageType: data.package,
+          email: data.email
+        })
+      });
+
+      const checkoutResult = await checkoutResponse.json();
+      if (checkoutResult.success && checkoutResult.url) {
+        // Redirect to Stripe Checkout page
+        window.location.href = checkoutResult.url;
+      } else {
+        throw new Error(checkoutResult.error || 'Payment gateway initialization failed');
+      }
+
+    } catch (error) {
+      console.error("Submission Error:", error);
+      alert("There was an error processing your request. Please try again or contact support.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderStep = () => {
@@ -265,7 +314,7 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
         return (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 max-w-4xl mx-auto">
             <h2 className="text-3xl font-serif font-bold text-brand-heading mb-2">One Final Look</h2>
-            <p className="text-brand-body/70 mb-12">Review your choices and complete your order. We'll begin crafting your film as soon as payment is confirmed.</p>
+            <p className="text-brand-body/70 mb-12">Review your choices and provide your delivery email. We'll begin crafting your film as soon as payment is confirmed.</p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
               <div className="md:col-span-2 space-y-8">
@@ -287,7 +336,7 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
                       <dt className="text-brand-body/40 uppercase tracking-widest font-bold text-[10px]">Style</dt>
                       <dd className="font-semibold text-brand-body capitalize">{data.template.replace('-', ' ')}</dd>
                     </div>
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center border-b border-brand-section pb-4">
                       <dt className="text-brand-body/40 uppercase tracking-widest font-bold text-[10px]">Sound</dt>
                       <dd className="font-semibold text-brand-body truncate max-w-[200px]">
                         {data.music.source === 'library' 
@@ -297,6 +346,18 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
                       </dd>
                     </div>
                   </dl>
+                  
+                  <div className="mt-8 pt-8 border-t border-brand-section">
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-brand-heading/60 mb-3">Delivery Email Address</label>
+                    <input 
+                      type="email" 
+                      value={data.email}
+                      onChange={(e) => handleDataChange('email', e.target.value)}
+                      placeholder="you@example.com"
+                      className="w-full px-6 py-4 rounded-2xl border border-brand-section bg-brand-main/20 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all font-medium"
+                    />
+                    <p className="text-[9px] text-brand-body/40 mt-3 uppercase tracking-wider">Your private download link will be sent here.</p>
+                  </div>
                 </div>
 
                 <div className="bg-brand-emotion/30 border border-brand-emotion rounded-3xl p-8 text-brand-body">
@@ -342,6 +403,7 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
                     className="w-full py-5 text-lg shadow-xl" 
                     onClick={handleSubmit} 
                     loading={loading}
+                    disabled={!data.email || !/^\S+@\S+\.\S+$/.test(data.email)}
                   >
                     Complete & Pay
                   </Button>

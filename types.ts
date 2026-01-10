@@ -22,6 +22,7 @@ export enum PackageType {
 
 export interface MemorialData {
   petName: string;
+  email: string;
   birthDate: string;
   passedDate: string;
   message: string;

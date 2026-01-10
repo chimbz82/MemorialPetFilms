@@ -1,20 +1,70 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Memorial Pet Films
 
-# Run and deploy your AI Studio app
+A private, beautifully crafted memorial film service to honour a beloved pet.
 
-This contains everything you need to run your app locally.
+## Installation & Setup
 
-View your app in AI Studio: https://ai.studio/apps/drive/1ZJSNFgNn8NDLi-snNyf1geFs4ePro5tz
+### 1. Prerequisites
+Ensure you have the following installed on your system:
+- **Node.js** (v18 or higher)
+- **Redis Server** (for background job processing)
+- **FFmpeg** (for video rendering)
 
-## Run Locally
+```bash
+sudo apt-get update
+sudo apt-get install -y nodejs redis-server ffmpeg
+```
 
-**Prerequisites:**  Node.js
+### 2. Project Setup
+Clone the repository and install dependencies:
 
+```bash
+cd memorial-pet-films
+npm install
+cp .env.example .env
+```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### 3. Environment Configuration
+Edit the `.env` file with your specific credentials:
+- **Google Gemini API**: For AI-generated tributes.
+- **Stripe**: For secure one-time payments.
+- **AWS S3**: For private media storage and delivery.
+- **Redis**: For managing the video render queue.
+
+### 4. Music Assets
+Place your background music files in the `backend/music/` directory. Ensure the filenames match the IDs defined in `backend/src/services/musicLibraryService.js`:
+- `gentle-piano-01.mp3`
+- `soft-strings-01.mp3`
+- `peaceful-acoustic-01.mp3`
+- `calm-ambient-01.mp3`
+- `serene-harp-01.mp3`
+
+### 5. Start Services
+Open three terminal windows/sessions:
+
+**Terminal 1: Redis**
+```bash
+redis-server
+```
+
+**Terminal 2: API Server**
+```bash
+npm run dev
+```
+
+**Terminal 3: Video Worker**
+```bash
+npm run worker
+```
+
+### 6. Testing
+Verify the backend is running correctly:
+```bash
+curl http://localhost:5000/health
+# Expected response: {"status":"healthy", "timestamp": "..."}
+```
+
+## Security & Privacy
+- **No Accounts**: User privacy is maintained by not requiring logins.
+- **Encrypted Storage**: Media is stored in private S3 buckets.
+- **30-Day Retention**: Automated cleanup script purges all files 30 days after creation.

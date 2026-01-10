@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "worker": "node src/workers/videoWorker.js"
+    "worker": "node src/workers/videoWorker.js",
+    "cleanup": "node src/scripts/cleanup.js"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -13,6 +14,7 @@
     "dotenv": "^16.3.1",
     "stripe": "^14.9.0",
     "aws-sdk": "^2.1509.0",
+    "@aws-sdk/client-s3": "^3.450.0",
     "uuid": "^9.0.1",
     "winston": "^3.11.0",
     "helmet": "^7.1.0",
