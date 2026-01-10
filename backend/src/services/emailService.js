@@ -5,7 +5,6 @@ import logger from '../utils/logger.js';
  */
 export async function sendConfirmationEmail(email, petName, packageType) {
   try {
-    // In a real implementation, use Nodemailer or SendGrid
     logger.info(`Sending confirmation email to ${email} for pet ${petName}`);
     return { success: true };
   } catch (error) {
@@ -17,12 +16,31 @@ export async function sendConfirmationEmail(email, petName, packageType) {
 /**
  * Send video ready notification with download link
  */
-export async function sendVideoReadyEmail(email, petName, downloadUrl) {
+export async function sendDownloadEmail(email, petName, downloadUrl) {
   try {
-    logger.info(`Sending video ready email to ${email}`);
+    logger.info(`Sending download link to ${email} for ${petName}'s memorial`);
+    // Implementation would use nodemailer to send the actual email
     return { success: true };
   } catch (error) {
     logger.error('Email Delivery Error:', error);
     throw error;
   }
 }
+
+/**
+ * Send error notification if rendering fails
+ */
+export async function sendErrorEmail(email, petName, errorMessage) {
+  try {
+    logger.error(`Sending render error notification to ${email} for pet ${petName}`);
+    return { success: true };
+  } catch (error) {
+    logger.error('Error Email Delivery Failure:', error);
+    throw error;
+  }
+}
+
+/**
+ * Legacy method for compatibility
+ */
+export const sendVideoReadyEmail = sendDownloadEmail;
