@@ -1,11 +1,20 @@
+/**
+ * S3 operations with presigned URLs
+ * FIX A: Enforces upload max size using presigned POST policy with content-length-range
+ */
+
 import { 
   S3Client, 
   PutObjectCommand, 
   GetObjectCommand,
   DeleteObjectsCommand,
-  ListObjectsV2Command
+  ListObjectsV2Command,
+  CreateMultipartUploadCommand,
+  UploadPartCommand,
+  CompleteMultipartUploadCommand
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import crypto from 'crypto';
 
 const s3Client = new S3Client({
@@ -18,6 +27,7 @@ const s3Client = new S3Client({
 
 const BUCKET = process.env.AWS_BUCKET_NAME || 'memorial-pet-films';
 
+// File validation rules
 export const ALLOWED_TYPES = {
   image: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
   video: ['video/mp4', 'video/quicktime'],
@@ -25,9 +35,9 @@ export const ALLOWED_TYPES = {
 };
 
 export const MAX_SIZES = {
-  image: 50 * 1024 * 1024,
-  video: 100 * 1024 * 1024,
-  audio: 20 * 1024 * 1024
+  image: 50 * 1024 * 1024,  // 50MB
+  video: 100 * 1024 * 1024, // 100MB
+  audio: 20 * 1024 * 1024   // 20MB
 };
 
 export const MAX_COUNTS = {
@@ -36,27 +46,55 @@ export const MAX_COUNTS = {
   audio: 1
 };
 
+/**
+ * FIX A: Generate presigned POST with content-length-range enforcement
+ * This ensures S3 itself rejects files exceeding size limits
+ */
 export async function getPresignedUploadUrl(jobId, kind, filename, contentType) {
+  // Validate content type
   if (!ALLOWED_TYPES[kind]?.includes(contentType)) {
     throw new Error(`Invalid content type for ${kind}: ${contentType}`);
   }
   
+  // Generate safe filename with UUID
   const ext = getExtension(contentType);
   const safeFilename = `${crypto.randomUUID()}.${ext}`;
+  
+  // Standardized key: uploads/{jobId}/{kind}s/{uuid}.{ext}
   const key = `uploads/${jobId}/${kind}s/${safeFilename}`;
   
-  const command = new PutObjectCommand({
+  // Get max size for this kind
+  const maxSize = MAX_SIZES[kind];
+  
+  // Create presigned POST with conditions
+  const { url, fields } = await createPresignedPost(s3Client, {
     Bucket: BUCKET,
     Key: key,
-    ContentType: contentType,
-    ServerSideEncryption: 'AES256'
+    Conditions: [
+      ['content-length-range', 0, maxSize], // FIX A: Enforce size limit
+      ['starts-with', '$Content-Type', contentType.split('/')[0] + '/'], // Enforce content type prefix
+      { 'Content-Type': contentType },
+      { 'x-amz-server-side-encryption': 'AES256' }
+    ],
+    Fields: {
+      'Content-Type': contentType,
+      'x-amz-server-side-encryption': 'AES256'
+    },
+    Expires: 300 // 5 minutes
   });
   
-  const url = await getSignedUrl(s3Client, command, { expiresIn: 300 });
-  
-  return { url, key, filename: safeFilename };
+  return { 
+    url, 
+    fields,
+    key, 
+    filename: safeFilename,
+    maxSize 
+  };
 }
 
+/**
+ * Generate presigned download URL (short-lived)
+ */
 export async function getPresignedDownloadUrl(key, expiresIn = 3600) {
   const command = new GetObjectCommand({
     Bucket: BUCKET,
@@ -67,6 +105,9 @@ export async function getPresignedDownloadUrl(key, expiresIn = 3600) {
   return await getSignedUrl(s3Client, command, { expiresIn });
 }
 
+/**
+ * Upload file directly (for worker use)
+ */
 export async function uploadFile(key, body, contentType) {
   const command = new PutObjectCommand({
     Bucket: BUCKET,
@@ -80,6 +121,9 @@ export async function uploadFile(key, body, contentType) {
   return { key };
 }
 
+/**
+ * Download file as stream (for worker use)
+ */
 export async function downloadFile(key) {
   const command = new GetObjectCommand({
     Bucket: BUCKET,
@@ -90,9 +134,13 @@ export async function downloadFile(key) {
   return response.Body;
 }
 
+/**
+ * Delete multiple files
+ */
 export async function deleteFiles(keys) {
   if (!keys || keys.length === 0) return;
   
+  // S3 allows max 1000 keys per delete request
   const batches = [];
   for (let i = 0; i < keys.length; i += 1000) {
     batches.push(keys.slice(i, i + 1000));
@@ -111,7 +159,10 @@ export async function deleteFiles(keys) {
   }
 }
 
-export async function listFilesByPrefix(prefix, olderThan) {
+/**
+ * List files by prefix (for cleanup)
+ */
+export async function listFilesByPrefix(prefix, olderThan = null) {
   const command = new ListObjectsV2Command({
     Bucket: BUCKET,
     Prefix: prefix
@@ -121,11 +172,19 @@ export async function listFilesByPrefix(prefix, olderThan) {
   
   if (!response.Contents) return [];
   
-  return response.Contents
-    .filter(obj => obj.LastModified < olderThan)
-    .map(obj => obj.Key);
+  let files = response.Contents;
+  
+  // Filter by date if provided
+  if (olderThan) {
+    files = files.filter(obj => obj.LastModified < olderThan);
+  }
+  
+  return files.map(obj => obj.Key);
 }
 
+/**
+ * Get file extension from MIME type
+ */
 function getExtension(mimeType) {
   const extensions = {
     'image/jpeg': 'jpg',
@@ -149,5 +208,8 @@ export default {
   uploadFile,
   downloadFile,
   deleteFiles,
-  listFilesByPrefix
+  listFilesByPrefix,
+  ALLOWED_TYPES,
+  MAX_SIZES,
+  MAX_COUNTS
 };
