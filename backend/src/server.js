@@ -7,6 +7,7 @@ import checkoutRoutes from './routes/checkout.js';
 import webhookRoutes from './routes/webhooks.js';
 import downloadRoutes from './routes/download.js';
 import logger from './utils/logger.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
 
@@ -35,6 +36,9 @@ app.use('/api/download', downloadRoutes);
 app.get('/health', (req, res) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
+
+// Error handling - MUST be after all routes
+app.use(errorHandler);
 
 // Start Server
 app.listen(PORT, () => {
