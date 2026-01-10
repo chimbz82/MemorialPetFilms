@@ -1,0 +1,34 @@
+FROM node:18-alpine
+
+# Install FFmpeg and required fonts for text rendering
+RUN apk add --no-cache \
+    ffmpeg \
+    ttf-dejavu \
+    && rm -rf /var/cache/apk/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package.json ./
+COPY worker/package.json ./worker/
+COPY shared ./shared
+
+# Install dependencies
+RUN cd worker && npm install --production
+
+# Copy worker code
+COPY worker ./worker
+
+# Create temp directory for renders
+RUN mkdir -p /tmp/memorial-renders && chmod 777 /tmp/memorial-renders
+
+# Create library-audio directory
+RUN mkdir -p /app/library-audio
+
+# Health check (check if worker process is running)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD pgrep -f "node worker/index.js" || exit 1
+
+# Start worker
+CMD ["node", "worker/index.js"]
