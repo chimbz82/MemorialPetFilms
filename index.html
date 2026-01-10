@@ -28,6 +28,8 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-main);
             color: var(--text-body);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         h1, h2, h3, .serif {
             font-family: 'Playfair Display', serif;
@@ -41,16 +43,29 @@
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: var(--bg-emotion);
+          background: var(--accent-primary);
           border-radius: 10px;
         }
 
         .card-shadow {
-          box-shadow: 0 10px 30px -15px rgba(184, 124, 76, 0.1);
+          box-shadow: 0 10px 30px -15px rgba(184, 124, 76, 0.15);
         }
         
+        .fade-in-section {
+          animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
         button, a {
-          transition: all 0.3s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        input, textarea, select {
+          accent-color: var(--accent-primary);
         }
     </style>
     <script>
@@ -70,6 +85,9 @@
                 body: '#6B4F3F',
                 muted: 'rgba(107, 79, 63, 0.7)',
               }
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.6s ease-out forwards',
             }
           }
         }
@@ -88,5 +106,6 @@
 </head>
 <body class="bg-brand-main text-brand-body">
     <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
 </body>
 </html>

@@ -1,7 +1,5 @@
 {
   "name": "Memorial Pet Films",
   "description": "A private, beautifully crafted memorial film to honour a beloved pet. One-time payment. No accounts. Delivered with care.",
-  "requestFramePermissions": [
-    "camera"
-  ]
+  "requestFramePermissions": []
 }
