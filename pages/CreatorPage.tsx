@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { AppStep, MemorialData, PackageType, Template } from '../types';
 import FileUpload from '../components/FileUpload';
@@ -27,7 +26,7 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
     template: 'forever-loved',
     music: {
       source: 'library',
-      libraryTrackId: 'gentle-piano',
+      libraryTrackId: 'gentle-piano-01',
       uploadedAudio: null,
     },
     package: PackageType.PREMIUM,
@@ -187,8 +186,13 @@ const CreatorPage: React.FC<CreatorPageProps> = ({ onSuccess, onNavigate }) => {
                           className="opacity-0 group-hover:opacity-100 text-[10px] uppercase font-bold tracking-widest bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full transition-opacity text-brand-heading shadow-sm z-10"
                           onClick={(e) => { e.stopPropagation(); setSelectedPreview(t); }}
                         >
-                          Preview Detail
+                          Preview Style
                         </span>
+                        {data.template === t.id && (
+                          <div className="absolute top-2 right-2 w-6 h-6 bg-brand-primary rounded-full flex items-center justify-center shadow-md animate-in zoom-in duration-300">
+                            <svg className="w-4 h-4 text-brand-body" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                          </div>
+                        )}
                       </div>
                       <h5 className="font-bold text-sm text-brand-heading mb-1">{t.name}</h5>
                       <p className="text-[11px] text-brand-body/60 leading-relaxed line-clamp-2">{t.description}</p>
