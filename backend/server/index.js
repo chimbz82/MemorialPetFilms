@@ -256,8 +256,8 @@ app.post('/api/presign', presignLimiter, async (req, res) => {
         });
       }
       
-      // Generate presigned URL with size limit in policy
-      const { url, key, filename: safeFilename } = await getPresignedUploadUrl(
+      // FIXED: Get all fields from presigned POST including 'fields'
+      const { url, fields, key, filename: safeFilename, maxSize } = await getPresignedUploadUrl(
         jobId, 
         kind, 
         filename, 
@@ -271,11 +271,13 @@ app.post('/api/presign', presignLimiter, async (req, res) => {
         [jobId, kind, key, filename, contentType]
       );
       
+      // FIXED: Return all necessary fields for presigned POST upload
       uploads.push({ 
-        url, 
+        url,
+        fields,  // ← CRITICAL FIX: Must include fields for POST upload
         key, 
         filename: safeFilename,
-        maxSize: MAX_SIZES[kind]
+        maxSize
       });
     }
     
