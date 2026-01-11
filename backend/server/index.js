@@ -579,3 +579,4 @@ app.listen(PORT, () => {
   console.log(`✓ Stripe configured: ${!!process.env.STRIPE_SECRET_KEY}`);
   console.log(`✓ S3 bucket: ${process.env.AWS_BUCKET_NAME}`);
 });
+ "Fix comment syntax in index.js"
