@@ -11,15 +11,15 @@ import { rateLimit } from 'express-rate-limit';
 import Stripe from 'stripe';
 import { Queue } from 'bullmq';
 import { nanoid } from 'nanoid';
-import { query, transaction } from '../shared/db.js';
-import { validateTemplate, validateLibraryTrack } from '../shared/templates.js';
+import { query, transaction } from './shared/db.js';
+import { validateTemplate, validateLibraryTrack } from './shared/templates.js';
 import { 
   getPresignedUploadUrl, 
   getPresignedDownloadUrl, 
   ALLOWED_TYPES, 
   MAX_SIZES, 
   MAX_COUNTS 
-} from '../shared/s3.js';
+} from './shared/s3.js';
 
 const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
