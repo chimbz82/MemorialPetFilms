@@ -1,6 +1,6 @@
-// Fixed imports/**
+/**
  * Memorial Pet Films - API Server
- * Production-ready backend with real FFmpeg rendering
+ * Production-ready backend with real ffmpeg rendering
  */
 
 import 'dotenv/config';
