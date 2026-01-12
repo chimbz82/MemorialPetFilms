@@ -9,15 +9,11 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFooter }) => {
-  // Use this ONLY for in-page navigation links (How it works / Templates / Pricing)
   const handleNavClick = (e: React.MouseEvent, step: AppStep, section?: string) => {
     e.preventDefault();
     onNavigate(step, section);
 
-    // Optional: if you're already on landing and want to scroll to section
-    // this will work if your landing page IDs match.
     if (section) {
-      // Let React render first then scroll
       window.setTimeout(() => {
         const el = document.getElementById(section);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -25,24 +21,14 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFoot
     }
   };
 
-  // Brand/Home must NEVER get stuck. Don't preventDefault. Let browser navigate.
   const handleBrandClick = () => {
-    // Smooth SPA state update if available
     onNavigate(AppStep.LANDING);
-
-    // Hard fallback: always go home (prevents "stuck" states)
-    if (window.location.pathname !== '/') {
-      window.location.href = '/';
-    }
+    if (window.location.pathname !== '/') window.location.href = '/';
   };
 
-  // Create Tribute: treat as app step; also provide a hard fallback route if needed
   const handleCreateClick = (e: React.MouseEvent) => {
     e.preventDefault();
     onNavigate(AppStep.UPLOAD);
-
-    // If your app uses actual routes and sometimes state fails, keep this:
-    // window.location.href = '/create';
   };
 
   return (
@@ -51,27 +37,27 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFoot
         <nav className="bg-brand-main/80 backdrop-blur-md border-b border-brand-section sticky top-0 z-[60] pointer-events-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
-              {/* Brand / Home - must always work */}
+              {/* Brand/Home */}
               <a
                 href="/"
                 className="flex items-center gap-3 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-lg px-2 py-1 z-[70] pointer-events-auto"
                 onClick={(e) => {
-                  // DO NOT preventDefault here.
-                  // We still want browser navigation to work no matter what.
                   e.stopPropagation();
                   handleBrandClick();
                 }}
                 aria-label="Memorial Pet Films Home"
               >
+                {/* ICON ONLY (transparent) */}
                 <img
-                  src="/brand/MPFMAIN.png"
+                  src="/brand/MPFWHITEBGD.png"
                   alt="Memorial Pet Films"
-                  className="h-8 w-auto"
+                  className="h-7 w-auto opacity-90 group-hover:opacity-100 transition-opacity"
                   onError={(ev) => {
-                    // If logo missing, fall back to emoji without breaking layout
                     (ev.currentTarget as HTMLImageElement).style.display = 'none';
                   }}
                 />
+
+                {/* Keep the name as text (cleaner than a wordmark image) */}
                 <span className="text-lg font-serif font-bold text-brand-heading tracking-tight">
                   Memorial Pet Films
                 </span>
@@ -124,9 +110,9 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFoot
               <div className="col-span-1 md:col-span-2">
                 <div className="flex items-center mb-6">
                   <img
-                    src="/brand/MPFMAIN.png"
+                    src="/brand/MPFWHITEBGD.png"
                     alt="Memorial Pet Films"
-                    className="h-8 w-auto opacity-80 mr-3"
+                    className="h-8 w-auto opacity-70 mr-3"
                     onError={(ev) => {
                       (ev.currentTarget as HTMLImageElement).style.display = 'none';
                     }}
@@ -137,8 +123,8 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFoot
                 </div>
 
                 <p className="text-brand-body/70 max-w-sm leading-relaxed text-sm">
-                  Memorial Pet Films helps families create private, respectful video tributes to honour
-                  the memory of a beloved pet.
+                  Memorial Pet Films helps families create private, respectful video tributes to honour the
+                  memory of a beloved pet.
                 </p>
 
                 <div className="mt-6">
@@ -157,34 +143,22 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFoot
                 </h4>
                 <ul className="space-y-4 text-brand-body/60 text-sm">
                   <li>
-                    <button
-                      onClick={() => onNavigate(AppStep.LEGAL)}
-                      className="hover:text-brand-heading transition-colors"
-                    >
+                    <button onClick={() => onNavigate(AppStep.LEGAL)} className="hover:text-brand-heading transition-colors">
                       Privacy Policy
                     </button>
                   </li>
                   <li>
-                    <button
-                      onClick={() => onNavigate(AppStep.TERMS)}
-                      className="hover:text-brand-heading transition-colors"
-                    >
+                    <button onClick={() => onNavigate(AppStep.TERMS)} className="hover:text-brand-heading transition-colors">
                       Terms of Service
                     </button>
                   </li>
                   <li>
-                    <button
-                      onClick={() => onNavigate(AppStep.REFUNDS)}
-                      className="hover:text-brand-heading transition-colors"
-                    >
+                    <button onClick={() => onNavigate(AppStep.REFUNDS)} className="hover:text-brand-heading transition-colors">
                       Refund Policy
                     </button>
                   </li>
                   <li>
-                    <button
-                      onClick={() => onNavigate(AppStep.FAQ)}
-                      className="hover:text-brand-heading transition-colors"
-                    >
+                    <button onClick={() => onNavigate(AppStep.FAQ)} className="hover:text-brand-heading transition-colors">
                       FAQs
                     </button>
                   </li>
@@ -197,18 +171,12 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFoot
                 </h4>
                 <ul className="space-y-4 text-brand-body/60 text-sm">
                   <li>
-                    <button
-                      onClick={() => onNavigate(AppStep.CONTACT)}
-                      className="hover:text-brand-heading transition-colors"
-                    >
+                    <button onClick={() => onNavigate(AppStep.CONTACT)} className="hover:text-brand-heading transition-colors">
                       Contact Us
                     </button>
                   </li>
                   <li>
-                    <button
-                      onClick={() => onNavigate(AppStep.MISSION)}
-                      className="hover:text-brand-heading transition-colors"
-                    >
+                    <button onClick={() => onNavigate(AppStep.MISSION)} className="hover:text-brand-heading transition-colors">
                       Our Mission
                     </button>
                   </li>
