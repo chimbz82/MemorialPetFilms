@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AppStep } from '../types';
 
@@ -10,9 +9,40 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFooter }) => {
+  // Use this ONLY for in-page navigation links (How it works / Templates / Pricing)
   const handleNavClick = (e: React.MouseEvent, step: AppStep, section?: string) => {
     e.preventDefault();
     onNavigate(step, section);
+
+    // Optional: if you're already on landing and want to scroll to section
+    // this will work if your landing page IDs match.
+    if (section) {
+      // Let React render first then scroll
+      window.setTimeout(() => {
+        const el = document.getElementById(section);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+  };
+
+  // Brand/Home must NEVER get stuck. Don't preventDefault. Let browser navigate.
+  const handleBrandClick = () => {
+    // Smooth SPA state update if available
+    onNavigate(AppStep.LANDING);
+
+    // Hard fallback: always go home (prevents "stuck" states)
+    if (window.location.pathname !== '/') {
+      window.location.href = '/';
+    }
+  };
+
+  // Create Tribute: treat as app step; also provide a hard fallback route if needed
+  const handleCreateClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onNavigate(AppStep.UPLOAD);
+
+    // If your app uses actual routes and sometimes state fails, keep this:
+    // window.location.href = '/create';
   };
 
   return (
@@ -21,39 +51,60 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFoot
         <nav className="bg-brand-main/80 backdrop-blur-md border-b border-brand-section sticky top-0 z-[60] pointer-events-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
-              <a 
+              {/* Brand / Home - must always work */}
+              <a
                 href="/"
-                className="flex items-center cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-lg px-2 py-1 z-[70] pointer-events-auto"
-                onClick={(e) => handleNavClick(e, AppStep.LANDING)}
+                className="flex items-center gap-3 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-lg px-2 py-1 z-[70] pointer-events-auto"
+                onClick={(e) => {
+                  // DO NOT preventDefault here.
+                  // We still want browser navigation to work no matter what.
+                  e.stopPropagation();
+                  handleBrandClick();
+                }}
+                aria-label="Memorial Pet Films Home"
               >
-                <span className="text-xl mr-2 grayscale group-hover:grayscale-0 transition-all duration-300">🐾</span>
-                <span className="text-lg font-serif font-bold text-brand-heading tracking-tight">Memorial Pet Films</span>
+                <img
+                  src="/brand/MPFMAIN.png"
+                  alt="Memorial Pet Films"
+                  className="h-8 w-auto"
+                  onError={(ev) => {
+                    // If logo missing, fall back to emoji without breaking layout
+                    (ev.currentTarget as HTMLImageElement).style.display = 'none';
+                  }}
+                />
+                <span className="text-lg font-serif font-bold text-brand-heading tracking-tight">
+                  Memorial Pet Films
+                </span>
               </a>
+
               <div className="hidden md:flex space-x-8 text-sm font-semibold items-center z-[70] pointer-events-auto">
-                <a 
+                <a
                   href="#how-it-works"
-                  onClick={(e) => handleNavClick(e, AppStep.LANDING, 'how-it-works')} 
+                  onClick={(e) => handleNavClick(e, AppStep.LANDING, 'how-it-works')}
                   className="text-brand-body/70 hover:text-brand-heading relative py-1 transition-colors cursor-pointer"
                 >
                   How it works
                 </a>
-                <a 
+
+                <a
                   href="#templates"
-                  onClick={(e) => handleNavClick(e, AppStep.LANDING, 'templates')} 
+                  onClick={(e) => handleNavClick(e, AppStep.LANDING, 'templates')}
                   className="text-brand-body/70 hover:text-brand-heading relative py-1 transition-colors cursor-pointer"
                 >
                   Templates
                 </a>
-                <a 
+
+                <a
                   href="#pricing"
-                  onClick={(e) => handleNavClick(e, AppStep.LANDING, 'pricing')} 
+                  onClick={(e) => handleNavClick(e, AppStep.LANDING, 'pricing')}
                   className="text-brand-body/70 hover:text-brand-heading relative py-1 transition-colors cursor-pointer"
                 >
                   Pricing
                 </a>
-                <a 
+
+                <a
                   href="/create"
-                  onClick={(e) => handleNavClick(e, AppStep.UPLOAD)}
+                  onClick={handleCreateClick}
                   className="bg-brand-primary text-brand-body px-5 py-2 rounded-full hover:bg-[#FFB861] transition-all shadow-sm active:scale-95 cursor-pointer ml-4"
                 >
                   Create Tribute
@@ -64,9 +115,7 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFoot
         </nav>
       )}
 
-      <main className="flex-grow relative z-10">
-        {children}
-      </main>
+      <main className="flex-grow relative z-10">{children}</main>
 
       {!hideFooter && (
         <footer className="bg-brand-section border-t border-brand-section py-16 relative z-20">
@@ -74,35 +123,99 @@ const Layout: React.FC<LayoutProps> = ({ children, onNavigate, hideNav, hideFoot
             <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
               <div className="col-span-1 md:col-span-2">
                 <div className="flex items-center mb-6">
-                  <span className="text-xl mr-2 opacity-60">🐾</span>
-                  <span className="text-xl font-serif font-bold text-brand-heading">Memorial Pet Films</span>
+                  <img
+                    src="/brand/MPFMAIN.png"
+                    alt="Memorial Pet Films"
+                    className="h-8 w-auto opacity-80 mr-3"
+                    onError={(ev) => {
+                      (ev.currentTarget as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                  <span className="text-xl font-serif font-bold text-brand-heading">
+                    Memorial Pet Films
+                  </span>
                 </div>
+
                 <p className="text-brand-body/70 max-w-sm leading-relaxed text-sm">
-                  Memorial Pet Films helps families create private, respectful video tributes to honour the memory of a beloved pet.
+                  Memorial Pet Films helps families create private, respectful video tributes to honour
+                  the memory of a beloved pet.
                 </p>
+
                 <div className="mt-6">
-                  <a href="mailto:MemorialPetFilms@protonmail.com" className="text-xs font-bold text-brand-heading/60 hover:text-brand-heading transition-colors flex items-center">
+                  <a
+                    href="mailto:MemorialPetFilms@protonmail.com"
+                    className="text-xs font-bold text-brand-heading/60 hover:text-brand-heading transition-colors flex items-center"
+                  >
                     <span className="mr-2">✉</span> MemorialPetFilms@protonmail.com
                   </a>
                 </div>
               </div>
+
               <div>
-                <h4 className="font-bold text-brand-heading mb-6 uppercase tracking-widest text-[10px]">Support</h4>
+                <h4 className="font-bold text-brand-heading mb-6 uppercase tracking-widest text-[10px]">
+                  Support
+                </h4>
                 <ul className="space-y-4 text-brand-body/60 text-sm">
-                  <li><button onClick={() => onNavigate(AppStep.LEGAL)} className="hover:text-brand-heading transition-colors">Privacy Policy</button></li>
-                  <li><button onClick={() => onNavigate(AppStep.TERMS)} className="hover:text-brand-heading transition-colors">Terms of Service</button></li>
-                  <li><button onClick={() => onNavigate(AppStep.REFUNDS)} className="hover:text-brand-heading transition-colors">Refund Policy</button></li>
-                  <li><button onClick={() => onNavigate(AppStep.FAQ)} className="hover:text-brand-heading transition-colors">FAQs</button></li>
+                  <li>
+                    <button
+                      onClick={() => onNavigate(AppStep.LEGAL)}
+                      className="hover:text-brand-heading transition-colors"
+                    >
+                      Privacy Policy
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => onNavigate(AppStep.TERMS)}
+                      className="hover:text-brand-heading transition-colors"
+                    >
+                      Terms of Service
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => onNavigate(AppStep.REFUNDS)}
+                      className="hover:text-brand-heading transition-colors"
+                    >
+                      Refund Policy
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => onNavigate(AppStep.FAQ)}
+                      className="hover:text-brand-heading transition-colors"
+                    >
+                      FAQs
+                    </button>
+                  </li>
                 </ul>
               </div>
+
               <div>
-                <h4 className="font-bold text-brand-heading mb-6 uppercase tracking-widest text-[10px]">Company</h4>
+                <h4 className="font-bold text-brand-heading mb-6 uppercase tracking-widest text-[10px]">
+                  Company
+                </h4>
                 <ul className="space-y-4 text-brand-body/60 text-sm">
-                  <li><button onClick={() => onNavigate(AppStep.CONTACT)} className="hover:text-brand-heading transition-colors">Contact Us</button></li>
-                  <li><button onClick={() => onNavigate(AppStep.MISSION)} className="hover:text-brand-heading transition-colors">Our Mission</button></li>
+                  <li>
+                    <button
+                      onClick={() => onNavigate(AppStep.CONTACT)}
+                      className="hover:text-brand-heading transition-colors"
+                    >
+                      Contact Us
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => onNavigate(AppStep.MISSION)}
+                      className="hover:text-brand-heading transition-colors"
+                    >
+                      Our Mission
+                    </button>
+                  </li>
                 </ul>
               </div>
             </div>
+
             <div className="mt-16 pt-8 border-t border-brand-emotion/50 text-center text-brand-body/40 text-xs uppercase tracking-widest">
               © 2026 Memorial Pet Films. All memories kept safe.
             </div>
