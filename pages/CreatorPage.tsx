@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { AppStep, MemorialData, PackageType, Template } from '../types';
 import FileUpload from '../components/FileUpload';
-import AIDescriptionHelper from '../components/AIDescriptionHelper';
 import Button from '../components/Button';
 import TemplateModal from '../components/TemplateModal';
 import { TEMPLATES, LIBRARY_TRACKS, PACKAGES } from '../constants';
