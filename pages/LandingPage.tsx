@@ -20,10 +20,12 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
 
   // These must exist in: /public/previews/
   const HERO_PREVIEWS = [
-    { src: '/previews/calmdog.gif', alt: 'Calm dog preview' },
-    { src: '/previews/cutecat.gif', alt: 'Cute cat preview' },
-    { src: '/previews/jumpdog.gif', alt: 'Jumping dog preview' },
+    { src: '/previews/calmdog.gif', alt: 'Calm dog preview', label: 'Gentle Farewell' },
+    { src: '/previews/cutecat.gif', alt: 'Cute cat preview', label: 'Soft Memory' },
+    { src: '/previews/jumpdog.gif', alt: 'Jumping dog preview', label: 'Golden Hour' },
   ];
+
+  const scrollToTemplates = () => templatesRef.current?.scrollIntoView({ behavior: 'smooth' });
 
   return (
     <div className="min-h-screen bg-brand-main">
@@ -49,11 +51,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
             <Button onClick={onStart} className="text-lg px-12 py-5 shadow-sm">
               Create a Memorial
             </Button>
-            <Button
-              variant="outline"
-              onClick={() => templatesRef.current?.scrollIntoView({ behavior: 'smooth' })}
-              className="text-lg px-12 py-5"
-            >
+            <Button variant="outline" onClick={scrollToTemplates} className="text-lg px-12 py-5">
               View Styles
             </Button>
           </div>
@@ -62,40 +60,44 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
             No accounts • One-time payment • Private delivery link
           </p>
 
-          {/* Preview Strip: 3 squares, max 480x480 each, responsive, NO overlap */}
-          <div className="mx-auto w-full max-w-6xl">
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+          {/* Preview Strip (Square cards, clickable, cleaner framing) */}
+          <div className="relative max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 p-4 bg-white/25 backdrop-blur rounded-3xl border border-brand-section/50 shadow-sm">
               {HERO_PREVIEWS.map((p) => (
-                <div
+                <button
                   key={p.src}
-                  className="
-                    relative
-                    w-full
-                    max-w-[480px]
-                    aspect-square
-                    shrink-0
-                    rounded-3xl
-                    overflow-hidden
-                    border
-                    border-brand-section/60
-                    bg-white/25
-                    backdrop-blur
-                    shadow-sm
-                  "
+                  type="button"
+                  onClick={scrollToTemplates}
+                  className="group text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-2xl"
+                  aria-label={`View styles: ${p.label}`}
                 >
-                  <div className="absolute inset-0 flex items-center justify-center p-6">
-                    <img
-                      src={p.src}
-                      alt={p.alt}
-                      loading="lazy"
-                      decoding="async"
-                      className="block max-w-full max-h-full object-contain"
-                    />
-                  </div>
+                  <div className="rounded-2xl border border-brand-section bg-white/30 overflow-hidden shadow-sm group-hover:shadow-md transition-shadow">
+                    {/* Card media area */}
+                    <div className="aspect-square w-full max-w-[420px] mx-auto p-3">
+                      <div className="w-full h-full rounded-xl overflow-hidden bg-white/40 border border-brand-section/60 relative">
+                        <img
+                          src={p.src}
+                          alt={p.alt}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-contain"
+                        />
+                        {/* subtle soft gradient so empty areas look intentional */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-brand-main/20 via-transparent to-transparent pointer-events-none" />
+                      </div>
+                    </div>
 
-                  {/* subtle brand overlay, not destructive */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-main/20 via-transparent to-transparent pointer-events-none" />
-                </div>
+                    {/* Caption */}
+                    <div className="px-5 pb-5">
+                      <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-brand-body/60 group-hover:text-brand-heading transition-colors">
+                        {p.label}
+                      </div>
+                      <div className="mt-2 text-xs text-brand-body/50">
+                        Click to view styles
+                      </div>
+                    </div>
+                  </div>
+                </button>
               ))}
             </div>
           </div>
@@ -141,7 +143,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-serif text-brand-heading mb-6">Tasteful Styles</h2>
-            <p className="text-brand-body/70 max-w-xl mx-auto">Nine carefully designed templates for every unique personality.</p>
+            <p className="text-brand-body/70 max-w-xl mx-auto">
+              Nine carefully designed templates for every unique personality.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -255,7 +259,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
               {TEMPLATES.map((template) => (
-                <button key={template.id} className="group text-left focus:outline-none" onClick={() => setSelectedPreview(template)}>
+                <button
+                  key={template.id}
+                  className="group text-left focus:outline-none"
+                  onClick={() => setSelectedPreview(template)}
+                >
                   <div
                     className={`${template.previewColor} aspect-video rounded-3xl mb-6 flex items-center justify-center border border-brand-section shadow-sm transition-all group-hover:shadow-md`}
                   >
