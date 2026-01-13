@@ -19,7 +19,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
   const pricingRef = useRef<HTMLElement>(null);
 
   // These must exist in: /public/previews/
-  // (You said you uploaded: calmdog.gif, cutecat.gif, jumpdog.gif)
   const HERO_PREVIEWS = [
     { src: '/previews/calmdog.gif', alt: 'Calm dog preview' },
     { src: '/previews/cutecat.gif', alt: 'Cute cat preview' },
@@ -63,21 +62,39 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
             No accounts • One-time payment • Private delivery link
           </p>
 
-          {/* Preview Strip (480x480 each, no cropping) */}
-          <div className="relative max-w-[1500px] mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 justify-items-center">
+          {/* Preview Strip: 3 squares, max 480x480 each, responsive, NO overlap */}
+          <div className="mx-auto w-full max-w-6xl">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               {HERO_PREVIEWS.map((p) => (
                 <div
                   key={p.src}
-                  className="w-[480px] h-[480px] bg-brand-section/40 border border-brand-section rounded-2xl flex items-center justify-center overflow-hidden"
+                  className="
+                    relative
+                    w-full
+                    max-w-[480px]
+                    aspect-square
+                    shrink-0
+                    rounded-3xl
+                    overflow-hidden
+                    border
+                    border-brand-section/60
+                    bg-white/25
+                    backdrop-blur
+                    shadow-sm
+                  "
                 >
-                  <img
-                    src={p.src}
-                    alt={p.alt}
-                    loading="lazy"
-                    decoding="async"
-                    className="max-w-full max-h-full object-contain"
-                  />
+                  <div className="absolute inset-0 flex items-center justify-center p-6">
+                    <img
+                      src={p.src}
+                      alt={p.alt}
+                      loading="lazy"
+                      decoding="async"
+                      className="block max-w-full max-h-full object-contain"
+                    />
+                  </div>
+
+                  {/* subtle brand overlay, not destructive */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-main/20 via-transparent to-transparent pointer-events-none" />
                 </div>
               ))}
             </div>
