@@ -63,31 +63,23 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStart, onNavigate }) => {
             No accounts • One-time payment • Private delivery link
           </p>
 
-          {/* Preview Strip (NOW REAL GIFS) */}
-          <div className="relative max-w-2xl mx-auto group">
-            <div className="grid grid-cols-3 gap-3 p-2 bg-white/30 backdrop-blur rounded-2xl border border-brand-section/50 shadow-sm opacity-90 group-hover:opacity-100 transition-opacity">
+          {/* Preview Strip (480x480 each, no cropping) */}
+          <div className="relative max-w-[1500px] mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 justify-items-center">
               {HERO_PREVIEWS.map((p) => (
                 <div
                   key={p.src}
-                  className="aspect-video bg-brand-section/50 rounded-lg overflow-hidden border border-brand-section relative"
+                  className="w-[480px] h-[480px] bg-brand-section/40 border border-brand-section rounded-2xl flex items-center justify-center overflow-hidden"
                 >
                   <img
                     src={p.src}
                     alt={p.alt}
                     loading="lazy"
                     decoding="async"
-                    className="w-full h-full object-cover"
+                    className="max-w-full max-h-full object-contain"
                   />
-                  {/* Soft overlay so it matches your brand */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-main/25 via-transparent to-transparent pointer-events-none" />
                 </div>
               ))}
-            </div>
-
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-              <span className="bg-brand-body/10 backdrop-blur-sm text-[10px] font-bold text-brand-heading px-3 py-1 rounded-full uppercase tracking-widest">
-                Preview Frame Strip
-              </span>
             </div>
           </div>
         </div>
